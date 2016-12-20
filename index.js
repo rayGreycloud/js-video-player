@@ -37,10 +37,9 @@ function handleProgress() {
   progressBar.style.flexBasis = `${percent}%`;
 }
 
-function scrub(event) {
-  const scrubTime = (event.offsetX / progress.offsetWidth) * video.duration;
+function scrub(e) {
+  const scrubTime = (e.offsetX / progress.offsetWidth) * video.duration;
   video.currentTime = scrubTime;
-  console.log(event);
 }
 
 // Hook up event listeners
@@ -49,15 +48,24 @@ video.addEventListener('click', togglePlay);
 // Toggle play button to match video status
 video.addEventListener('play', updateButton);
 video.addEventListener('pause', updateButton);
+
 // Update progress bar
 video.addEventListener('timeupdate', handleProgress);
+
 // Toggle play function when play button clicked
 toggle.addEventListener('click', togglePlay);
+
 // Trigger skip function when either skip button clicked
 skipButtons.forEach(button => button.addEventListener('click', skip));
+
 // Trigger volume or playback rate change when range changed
 ranges.forEach(range => range.addEventListener('change', handleRangeUpdate));
 // Trigger volume or playback rate change when mouse moves range slider
 ranges.forEach(range => range.addEventListener('mousemove', handleRangeUpdate));
-//
+
+// Change video progress when user clicks on progress bar
+let mousedown = false;
 progress.addEventListener('click', scrub);
+progress.addEventListener('mousemove', (e) => mousedown && scrub(e));
+progress.addEventListener('mousedown', () => mousedown = true);
+progress.addEventListener('mouseup', () => mousedown = false);
