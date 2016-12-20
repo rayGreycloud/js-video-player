@@ -4,8 +4,8 @@ const video = player.querySelector('.viewer');
 const progress = player.querySelector('.progress');
 const progressBar = player.querySelector('.progress__filled');
 const toggle = player.querySelector('.toggle');
-const skipButtons = player.querySelector('[data-skip]');
-const ranges = player.querySelector('.player__slider');
+const skipButtons = player.querySelectorAll('[data-skip]');
+const ranges = player.querySelectorAll('.player__slider');
 
 
 // Build out functions
@@ -20,7 +20,18 @@ function updateButton() {
   toggle.textContent = icon;
 }
 
+function skip() {
+  let message = '';
+  const interval = parseFloat(this.dataset.skip);
+  if (interval > 0) {
+    message = 'Fast-Forwarding 25 seconds...';
+  } else {
+    message = 'Rewinding 10 seconds...';
+  }
 
+  console.log(message);
+  video.currentTime += interval;
+}
 
 // Hook up event listeners
 video.addEventListener('click', togglePlay);
@@ -28,3 +39,4 @@ video.addEventListener('play', updateButton);
 video.addEventListener('pause', updateButton);
 
 toggle.addEventListener('click', togglePlay);
+skipButtons.forEach(button => button.addEventListener('click', skip));
